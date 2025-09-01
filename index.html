@@ -2,68 +2,79 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Mappa Interattiva</title>
+  <title>Mappa Interattiva KML</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet CSS -->
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  <!-- Stile -->
   <style>
     #map { height: 100vh; }
   </style>
 </head>
 <body>
-
 <div id="map"></div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"></script>
 
 <script>
-  // Inizializza mappa
+  // Inizializza la mappa
   var map = L.map('map').setView([41.9, 12.5], 6);
-
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  // Oggetto per contenere i layer
-  var layerGroups = {};
+  var layerGroups = {}; // per i folder
 
-  // Carica il KML
-  omnivore.kml('luoghi.kml')
-    .on('ready', function(e) {
-      var layer = e.target;
+  // Funzione per caricare il KML
+  fetch('luoghi.kml')
+    .then(response => response.text())
+    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+    .then(kml => {
+      var folders = kml.getElementsByTagName('Folder');
 
-      layer.eachLayer(function(l) {
-        if (l.feature && l.feature.properties && l.feature.properties.name) {
-          var name = l.feature.properties.name;
-          var coords = l.getLatLng();
-          if (coords) {
-            var link = `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}`;
-            l.bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`);
-          }
+      // Se non ci sono folder, prendiamo direttamente i Placemark
+      if (folders.length === 0) {
+        folders = [kml];
+      }
+
+      Array.from(folders).forEach(folder => {
+        var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
+        var placemarks = folder.getElementsByTagName('Placemark');
+
+        if (!layerGroups[folderName]) {
+          layerGroups[folderName] = L.layerGroup().addTo(map);
         }
 
-        // Se il punto appartiene a una cartella, la uso come "layer group"
-        if (l.feature && l.feature.properties && l.feature.properties.folder) {
-          var folder = l.feature.properties.folder;
-          if (!layerGroups[folder]) {
-            layerGroups[folder] = L.layerGroup().addTo(map);
+        Array.from(placemarks).forEach(pm => {
+          var name = pm.getElementsByTagName('name')[0]?.textContent || "Punto senza nome";
+          var coordsTag = pm.getElementsByTagName('coordinates')[0];
+          if (!coordsTag) return;
+
+          var coords = coordsTag.textContent.trim().split(",");
+          var lon = parseFloat(coords[0]);
+          var lat = parseFloat(coords[1]);
+
+          if (!isNaN(lat) && !isNaN(lon)) {
+            var link = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+            var marker = L.marker([lat, lon]).bindPopup(
+              `<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`
+            );
+            layerGroups[folderName].addLayer(marker);
           }
-          layerGroups[folder].addLayer(l);
-        }
+        });
       });
 
-      // Aggiungi controllo layer
+      // Aggiunge controllo per accendere/spegnere i Folder
       L.control.layers(null, layerGroups, { collapsed:false }).addTo(map);
 
-      map.fitBounds(layer.getBounds());
+      // Fit automatico alla prima cartella
+      var allMarkers = [];
+      Object.values(layerGroups).forEach(g => g.eachLayer(l => allMarkers.push(l.getLatLng())));
+      if (allMarkers.length > 0) {
+        map.fitBounds(L.latLngBounds(allMarkers));
+      }
     });
 </script>
-
 </body>
 </html>
