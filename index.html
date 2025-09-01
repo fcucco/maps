@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <title>Mappa Interattiva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- Stile -->
+  <style>
+    #map { height: 100vh; }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"></script>
+
+<script>
+  // Inizializza mappa
+  var map = L.map('map').setView([41.9, 12.5], 6);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Oggetto per contenere i layer
+  var layerGroups = {};
+
+  // Carica il KML
+  omnivore.kml('luoghi.kml')
+    .on('ready', function(e) {
+      var layer = e.target;
+
+      layer.eachLayer(function(l) {
+        if (l.feature && l.feature.properties && l.feature.properties.name) {
+          var name = l.feature.properties.name;
+          var coords = l.getLatLng();
+          if (coords) {
+            var link = `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}`;
+            l.bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`);
+          }
+        }
+
+        // Se il punto appartiene a una cartella, la uso come "layer group"
+        if (l.feature && l.feature.properties && l.feature.properties.folder) {
+          var folder = l.feature.properties.folder;
+          if (!layerGroups[folder]) {
+            layerGroups[folder] = L.layerGroup().addTo(map);
+          }
+          layerGroups[folder].addLayer(l);
+        }
+      });
+
+      // Aggiungi controllo layer
+      L.control.layers(null, layerGroups, { collapsed:false }).addTo(map);
+
+      map.fitBounds(layer.getBounds());
+    });
+</script>
+
+</body>
+</html>
