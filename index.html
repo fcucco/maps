@@ -2,19 +2,16 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Mappa Interattiva KML con Ricerca Funzionante</title>
+  <title>Mappa Interattiva KML con Ricerca Lente in Basso</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <!-- Leaflet Search CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
 
   <style>
     #map { height: 100vh; margin:0; padding:0; }
     body { margin:0; }
 
-    /* Assicura che la lente sia visibile */
     .leaflet-control-search { z-index: 1000; }
   </style>
 </head>
@@ -39,7 +36,7 @@
   };
 
   var layerGroups = {};
-  var allMarkersLayer = L.layerGroup(); // layer unico per ricerca
+  var allMarkersLayer = L.layerGroup(); 
 
   fetch('luoghi.kml')
     .then(res=>res.text())
@@ -67,7 +64,6 @@
           var link=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
           var icona = iconeCartelle[folderName] || new L.Icon.Default();
 
-          // Titolo per la ricerca
           var marker = L.marker([lat, lon], {icon:icona, title:name})
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
             .bindTooltip(name, {permanent:true,direction:"top"});
@@ -77,21 +73,20 @@
         });
       });
 
-      // Aggiungi il layer di ricerca alla mappa (necessario)
       allMarkersLayer.addTo(map);
 
       L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
 
-      // zoom automatico sui punti attivi
       var allMarkers=[];
       cartelleAttive.forEach(c=>{if(layerGroups[c]) layerGroups[c].eachLayer(l=>allMarkers.push(l.getLatLng()))});
       if(allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
 
-      // Controllo ricerca
+      // Controllo ricerca con lente in basso a sinistra
       map.addControl(new L.Control.Search({
         layer: allMarkersLayer,
-        propertyName:'title', // corrisponde a marker.options.title
+        propertyName:'title',
         marker:false,
+        position: 'bottomleft',
         moveToLocation:function(latlng,title,map){ map.setView(latlng,15); }
       }));
     });
