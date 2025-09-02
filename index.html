@@ -36,15 +36,16 @@
 
   var layerGroups = {};
   var allMarkers = [];
+  var markerFolderMap = new Map(); // associa marker alla cartella
 
   fetch('luoghi.kml')
-    .then(res=>res.text())
-    .then(str=>new window.DOMParser().parseFromString(str,"text/xml"))
-    .then(kml=>{
+    .then(res => res.text())
+    .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+    .then(kml => {
       var folders = kml.getElementsByTagName('Folder');
       if(folders.length===0) folders=[kml];
 
-      Array.from(folders).forEach(folder=>{
+      Array.from(folders).forEach(folder => {
         var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
         if(folderName==="I miei luoghi") return;
         if(cartelleConsentite.length>0 && !cartelleConsentite.includes(folderName)) return;
@@ -54,7 +55,7 @@
 
         if(cartelleAttive.includes(folderName)) layerGroups[folderName].addTo(map);
 
-        Array.from(placemarks).forEach(pm=>{
+        Array.from(placemarks).forEach(pm => {
           var name = pm.getElementsByTagName('name')[0]?.textContent || "Punto senza nome";
           var coords = pm.getElementsByTagName('coordinates')[0]?.textContent.trim().split(",");
           if(!coords) return;
@@ -64,12 +65,13 @@
           var link=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
           var icona = iconeCartelle[folderName] || new L.Icon.Default();
 
-          var marker = L.marker([lat, lon], {icon:icona, title:name})
+          var marker = L.marker([lat, lon], {icon: icona, title: name})
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
             .bindTooltip(name, {permanent:true,direction:"top"});
 
           layerGroups[folderName].addLayer(marker);
           allMarkers.push(marker);
+          markerFolderMap.set(marker, folderName); // salva associazione
         });
       });
 
@@ -81,27 +83,35 @@
       });
       if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-      // ricerca con lente in basso a sinistra
+      // layer invisibile per la ricerca
+      var searchLayer = L.layerGroup(allMarkers).addTo(map);
+      searchLayer.eachLayer(layer => layer.setOpacity(0));
+
+      // controllo ricerca con attivazione automatica della cartella
       map.addControl(new L.Control.Search({
-        sourceData: function(text, callResponse) {
-          var results = {};
-          allMarkers.forEach(marker => {
-            if(marker.options.title.toLowerCase().includes(text.toLowerCase())) {
-              results[marker.options.title] = marker.getLatLng();
-            }
-          });
-          callResponse(results);
-        },
+        layer: searchLayer,
+        propertyName: 'title',
         marker: false,
-        moveToLocation: function(latlng, title, map) { map.setView(latlng, 15); },
         collapsed: false,
         autoCollapse: true,
-        position: 'bottomleft'
+        position: 'bottomleft',
+        moveToLocation: function(latlng, title, map) {
+          map.setView(latlng, 15);
+          // attiva la cartella del marker trovato
+          var marker = allMarkers.find(m => m.options.title === title);
+          if(marker) {
+            var folderName = markerFolderMap.get(marker);
+            if(folderName && !map.hasLayer(layerGroups[folderName])) {
+              layerGroups[folderName].addTo(map);
+            }
+            marker.openPopup();
+          }
+        }
       }));
     });
 
   var tooltipThreshold=12;
-  map.on('zoomend',function(){
+  map.on('zoomend', function(){
     if(map.getZoom()<tooltipThreshold){ map.getPane('tooltipPane').style.display='none'; }
     else{ map.getPane('tooltipPane').style.display='block'; }
   });
