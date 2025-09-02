@@ -83,7 +83,7 @@ fetch('luoghi.kml')
     });
     if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-    // Ricerca con sourceData senza duplicare i marker
+    // Ricerca con sourceData (nessun layer duplicato)
     map.addControl(new L.Control.Search({
       sourceData: function(text, callResponse) {
         var results = {};
@@ -110,7 +110,6 @@ fetch('luoghi.kml')
         }
       }
     }));
-
   });
 
 var tooltipThreshold=12;
