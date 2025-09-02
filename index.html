@@ -4,15 +4,13 @@
   <meta charset="utf-8" />
   <title>Mappa Fowhe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
 
   <style>
     #map { height: 100vh; margin:0; padding:0; }
     body { margin:0; }
-
-    /* Assicura che la lente sia visibile */
     .leaflet-control-search { z-index: 1000; }
   </style>
 </head>
@@ -54,7 +52,6 @@
         var placemarks = folder.getElementsByTagName('Placemark');
         layerGroups[folderName] = L.layerGroup();
 
-        // aggiungi la cartella attiva alla mappa
         if(cartelleAttive.includes(folderName)) layerGroups[folderName].addTo(map);
 
         Array.from(placemarks).forEach(pm=>{
@@ -72,7 +69,7 @@
             .bindTooltip(name, {permanent:true,direction:"top"});
 
           layerGroups[folderName].addLayer(marker);
-          allMarkers.push(marker); // memorizza per la ricerca
+          allMarkers.push(marker);
         });
       });
 
@@ -85,15 +82,22 @@
       });
       if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-      // controllo ricerca
+      // controllo ricerca usando sourceData
       map.addControl(new L.Control.Search({
-        layer: L.layerGroup(allMarkers), // usa tutti i marker, anche non attivi
-        propertyName:'title',
-        marker:false,
+        sourceData: function(text, callResponse) {
+          var results = {};
+          allMarkers.forEach(marker => {
+            if(marker.options.title.toLowerCase().includes(text.toLowerCase())) {
+              results[marker.options.title] = marker.getLatLng();
+            }
+          });
+          callResponse(results);
+        },
+        marker: false,
+        moveToLocation: function(latlng, title, map) { map.setView(latlng, 15); },
+        collapsed: false,
         autoCollapse: true,
-        collapsed:false,
-        position: 'topright',
-        moveToLocation:function(latlng,title,map){ map.setView(latlng,15); }
+        position: 'topright'
       }));
     });
 
