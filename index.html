@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-search@2.9.9/dist/leaflet-search.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search@2.9.9/dist/leaflet-search.min.css" />
 
   <style>
     #map { height: 100vh; margin:0; padding:0; }
@@ -18,7 +18,7 @@
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-search@2.9.9/dist/leaflet-search.min.js"></script>
+<script src="https://unpkg.com/leaflet-control-search@2.9.9/dist/leaflet-search.min.js"></script>
 
 <script>
   var map = L.map('map').setView([41.9, 12.5], 6);
@@ -83,14 +83,17 @@
       });
       if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-      // layer invisibile per ricerca
-      var searchLayer = L.layerGroup(allMarkers).addTo(map);
-      searchLayer.eachLayer(layer => layer.setOpacity(0));
-
-      // controllo ricerca con attivazione automatica della cartella
+      // ricerca con sourceData
       map.addControl(new L.Control.Search({
-        layer: searchLayer,
-        propertyName: 'title',
+        sourceData: function(text, callResponse) {
+          var results = {};
+          allMarkers.forEach(marker => {
+            if(marker.options.title.toLowerCase().includes(text.toLowerCase())) {
+              results[marker.options.title] = marker.getLatLng();
+            }
+          });
+          callResponse(results);
+        },
         marker: false,
         collapsed: false,
         autoCollapse: true,
