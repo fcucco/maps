@@ -11,7 +11,7 @@
   <style>
     #map { height: 100vh; margin:0; padding:0; }
     body { margin:0; }
-    .leaflet-control-search { z-index: 1000; }
+    .leaflet-control-search { z-index: 1000; display:none; } /* nascosta di default */
   </style>
 </head>
 <body>
@@ -37,6 +37,9 @@ const iconeCartelle = {
 var layerGroups = {};
 var allMarkers = [];
 var markerFolderMap = new Map();
+
+// Layer fittizio per la voce “Ricerca”
+var ricercaLayer = L.layerGroup();
 
 fetch('luoghi.kml')
   .then(res => res.text())
@@ -75,7 +78,8 @@ fetch('luoghi.kml')
       });
     });
 
-    L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
+    // Controllo layer con voce "Ricerca"
+    L.control.layers(null, {...layerGroups, "Ricerca": ricercaLayer}, {collapsed:false}).addTo(map);
 
     var activeMarkers=[];
     cartelleAttive.forEach(c=>{
@@ -83,8 +87,8 @@ fetch('luoghi.kml')
     });
     if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-    // Ricerca con sourceData (nessun layer duplicato)
-    map.addControl(new L.Control.Search({
+    // Casella ricerca
+    var searchControl = new L.Control.Search({
       sourceData: function(text, callResponse) {
         var results = {};
         allMarkers.forEach(marker => {
@@ -107,9 +111,35 @@ fetch('luoghi.kml')
             layerGroups[folderName].addTo(map);
           }
           marker.openPopup();
+
+          // --- EFFETTO EVIDENZIAZIONE TEMPORANEA ---
+          var originalIcon = marker.options.icon;
+          var highlightIcon = L.icon({
+            iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
+            iconSize: [40,40],
+            iconAnchor: [20,40],
+            popupAnchor: [0,-40]
+          });
+          marker.setIcon(highlightIcon);
+          setTimeout(() => { marker.setIcon(originalIcon); }, 2000);
         }
       }
-    }));
+    });
+
+    // Mostra la casella solo se il layer "Ricerca" è selezionato
+    map.on('overlayadd', function(e) {
+      if(e.name==="Ricerca") {
+        map.addControl(searchControl);
+        document.querySelector('.leaflet-control-search').style.display='block';
+      }
+    });
+    map.on('overlayremove', function(e) {
+      if(e.name==="Ricerca") {
+        map.removeControl(searchControl);
+        document.querySelector('.leaflet-control-search').style.display='none';
+      }
+    });
+
   });
 
 var tooltipThreshold=12;
