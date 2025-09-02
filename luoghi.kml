@@ -8,11 +8,11 @@
 			<listItemType>check</listItemType>
 			<ItemIcon>
 				<state>open</state>
-				<href>files/mysavedplaces_open.png</href>
+				<href>:/mysavedplaces_open.png</href>
 			</ItemIcon>
 			<ItemIcon>
 				<state>closed</state>
-				<href>files/mysavedplaces_closed.png</href>
+				<href>:/mysavedplaces_closed.png</href>
 			</ItemIcon>
 			<bgColor>00ffffff</bgColor>
 			<maxSnippetLines>2</maxSnippetLines>
@@ -69,7 +69,6 @@
 		</Style>
 		<Folder>
 			<name>BTS Fowhe</name>
-			<open>1</open>
 			<Camera>
 				<longitude>18.5320466882344</longitude>
 				<latitude>40.02752899041403</latitude>
@@ -870,7 +869,6 @@
 		</Style>
 		<Folder>
 			<name>Acea - Solaria</name>
-			<open>1</open>
 			<Placemark>
 				<name>Brindisi Solaria</name>
 				<styleUrl>#failed46</styleUrl>
@@ -974,90 +972,6 @@
 	<Document>
 		<name>GSF</name>
 		<open>1</open>
-		<Style id="failed">
-		</Style>
-		<Style id="failed0">
-		</Style>
-		<StyleMap id="msn_wht-stars">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>runtime://clone0#sn_wht-stars</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>runtime://clone0#sh_wht-stars</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars0">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>#sn_wht-stars000</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>#sh_wht-stars</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars00">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>#sn_wht-stars00</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>#sh_wht-stars000</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars000">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>#sn_wht-stars</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>#sh_wht-stars0</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars001">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>#sn_wht-stars01</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>#sh_wht-stars00</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars0010">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>runtime://clone0#sn_wht-stars02</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>runtime://clone0#sh_wht-stars001</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars00100">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>#failed</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>#failed0</styleUrl>
-			</Pair>
-		</StyleMap>
-		<StyleMap id="msn_wht-stars001000">
-			<Pair>
-				<key>normal</key>
-				<styleUrl>#sn_wht-stars0</styleUrl>
-			</Pair>
-			<Pair>
-				<key>highlight</key>
-				<styleUrl>#sh_wht-stars0010</styleUrl>
-			</Pair>
-		</StyleMap>
 		<StyleMap id="msn_wht-stars00101">
 			<Pair>
 				<key>normal</key>
@@ -1068,179 +982,9 @@
 				<styleUrl>#sh_wht-stars001</styleUrl>
 			</Pair>
 		</StyleMap>
-		<Style id="sh_wht-stars">
-			<IconStyle>
-				<scale>1.3</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sh_wht-stars0">
-			<IconStyle>
-				<scale>1.3</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sh_wht-stars00">
-			<IconStyle>
-				<scale>1.3</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sh_wht-stars000">
-			<IconStyle>
-				<scale>1.3</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
 		<Style id="sh_wht-stars001">
 			<IconStyle>
 				<scale>1.3</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sh_wht-stars0010">
-			<IconStyle>
-				<scale>1.3</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sn_wht-stars">
-			<IconStyle>
-				<scale>1.1</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sn_wht-stars0">
-			<IconStyle>
-				<scale>1.1</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sn_wht-stars00">
-			<IconStyle>
-				<scale>1.1</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sn_wht-stars000">
-			<IconStyle>
-				<scale>1.1</scale>
-				<Icon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
-				</Icon>
-				<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-			</IconStyle>
-			<LabelStyle>
-				<scale>0.9</scale>
-			</LabelStyle>
-			<ListStyle>
-				<ItemIcon>
-					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars-lv.png</href>
-				</ItemIcon>
-			</ListStyle>
-		</Style>
-		<Style id="sn_wht-stars01">
-			<IconStyle>
-				<scale>1.1</scale>
 				<Icon>
 					<href>http://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href>
 				</Icon>
@@ -1275,6 +1019,13 @@
 		<Folder>
 			<name>GSF</name>
 			<open>1</open>
+			<Style>
+				<ListStyle>
+					<listItemType>check</listItemType>
+					<bgColor>00ffffff</bgColor>
+					<maxSnippetLines>2</maxSnippetLines>
+				</ListStyle>
+			</Style>
 			<Placemark>
 				<name>007PHO - EDS</name>
 				<LookAt>
@@ -1693,7 +1444,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars001</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -1743,7 +1494,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -1762,7 +1513,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -1780,7 +1531,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -1798,7 +1549,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -1816,7 +1567,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -2534,7 +2285,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars001000</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.990411,40.545181,0</coordinates>
 				</Point>
@@ -3063,16 +2814,7 @@
 					<range>650</range>
 					<altitudeMode>relativeToGround</altitudeMode>
 				</LookAt>
-				<StyleMap id="msn_wht-stars0010">
-					<Pair>
-						<key>normal</key>
-						<styleUrl>runtime://clone0#sn_wht-stars02</styleUrl>
-					</Pair>
-					<Pair>
-						<key>highlight</key>
-						<styleUrl>runtime://clone0#sh_wht-stars001</styleUrl>
-					</Pair>
-				</StyleMap>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.871111,40.583611,0</coordinates>
 				</Point>
@@ -3088,7 +2830,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.9797,40.60645833333334,0</coordinates>
 				</Point>
@@ -3104,7 +2846,7 @@
 					<range>650</range>
 					<altitudeMode>relativeToGround</altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.90365277777778,40.58339722222222,0</coordinates>
 				</Point>
@@ -3120,7 +2862,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.83731944444444,40.59450277777778,0</coordinates>
 				</Point>
@@ -3136,7 +2878,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.83885,40.59006944444445,0</coordinates>
 				</Point>
@@ -3152,7 +2894,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.95888888902914,40.60666666670561,0</coordinates>
 				</Point>
@@ -3168,7 +2910,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3187,7 +2929,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3206,7 +2948,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3226,7 +2968,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3244,7 +2986,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.96313416803336,40.21965438194562,0</coordinates>
 				</Point>
@@ -3261,7 +3003,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3281,7 +3023,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3298,7 +3040,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.99694306737052,40.31027862125216,0</coordinates>
 				</Point>
@@ -3315,7 +3057,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3333,7 +3075,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.18987222222222,40.17799722222222,0</coordinates>
 				</Point>
@@ -3349,7 +3091,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>15.68304444444445,41.38296666666667,0</coordinates>
 				</Point>
@@ -3365,7 +3107,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3383,7 +3125,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3404,7 +3146,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3422,7 +3164,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars00</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3441,7 +3183,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars000</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3458,7 +3200,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.99611111111111,40.33111111111111,0</coordinates>
 				</Point>
@@ -3473,7 +3215,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.17366944444445,40.23701666666667,0</coordinates>
 				</Point>
@@ -3489,7 +3231,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.79138888899627,40.46805555557314,0</coordinates>
 				</Point>
@@ -3505,7 +3247,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.88722222222222,40.425,0</coordinates>
 				</Point>
@@ -3521,7 +3263,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.84138888888889,40.63888888888889,0</coordinates>
 				</Point>
@@ -3537,7 +3279,7 @@
 					<range>650</range>
 					<altitudeMode>relativeToGround</altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.84583333333333,40.51277777777778,0</coordinates>
 				</Point>
@@ -3553,7 +3295,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.91038611111111,40.44164444444444,0</coordinates>
 				</Point>
@@ -3570,7 +3312,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3588,7 +3330,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.92289444444445,40.49433888888889,0</coordinates>
 				</Point>
@@ -3605,7 +3347,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3624,7 +3366,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3642,7 +3384,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3660,7 +3402,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.88722222222222,40.42333333333333,0</coordinates>
 				</Point>
@@ -3676,7 +3418,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.3125,40.53777777777778,0</coordinates>
 				</Point>
@@ -3692,7 +3434,7 @@
 					<range>600</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.75133888888889,40.62809722222222,0</coordinates>
 				</Point>
@@ -3709,7 +3451,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3727,7 +3469,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3745,7 +3487,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.884575,40.58065000000001,0</coordinates>
 				</Point>
@@ -3761,7 +3503,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.89527777777778,40.57472222222223,0</coordinates>
 				</Point>
@@ -3777,7 +3519,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.89971944444444,40.58690833333333,0</coordinates>
 				</Point>
@@ -3793,7 +3535,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3811,7 +3553,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3829,7 +3571,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3847,7 +3589,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
 					<coordinates>13.87056388788604,41.186775,0</coordinates>
@@ -3864,7 +3606,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.92130555555556,40.49568055555556,0</coordinates>
 				</Point>
@@ -3880,7 +3622,7 @@
 					<range>650</range>
 					<altitudeMode>relativeToGround</altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.82868055555555,40.67231944444444,0</coordinates>
 				</Point>
@@ -3896,7 +3638,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3914,7 +3656,7 @@
 					<range>503.1046154346284</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.75442036593978,40.62709295317987,0</coordinates>
 				</Point>
@@ -3930,7 +3672,7 @@
 					<range>650</range>
 					<altitudeMode>relativeToGround</altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.91044166666666,40.40064444444445,0</coordinates>
 				</Point>
@@ -3946,7 +3688,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -3964,7 +3706,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.88888888888889,40.425,0</coordinates>
 				</Point>
@@ -3980,7 +3722,7 @@
 					<range>650</range>
 					<altitudeMode>relativeToGround</altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.31316944444444,40.53585833333333,0</coordinates>
 				</Point>
@@ -3997,7 +3739,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4016,7 +3758,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4034,7 +3776,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4052,7 +3794,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4071,7 +3813,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4089,7 +3831,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.8341666665444,40.67166666666667,0</coordinates>
 				</Point>
@@ -4105,7 +3847,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4123,7 +3865,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4141,7 +3883,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4159,7 +3901,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4176,7 +3918,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.26111111111111,39.96611111111111,0</coordinates>
 				</Point>
@@ -4192,7 +3934,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.12040833333333,40.24676666666667,0</coordinates>
 				</Point>
@@ -4208,7 +3950,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4226,7 +3968,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.11654166666667,40.0355,0</coordinates>
 				</Point>
@@ -4242,7 +3984,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4259,7 +4001,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.98333333333335,40.51888888888889,0</coordinates>
 				</Point>
@@ -4274,7 +4016,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars00100</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.245556,39.969167,0</coordinates>
 				</Point>
@@ -4290,7 +4032,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.95166666666666,40.47333333333334,0</coordinates>
 				</Point>
@@ -4306,7 +4048,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>18.26328611111111,39.96594166666667,0</coordinates>
 				</Point>
@@ -4321,7 +4063,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars0010</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.9722222222222,40.52305555555555,0</coordinates>
 				</Point>
@@ -4337,16 +4079,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<StyleMap id="msn_wht-stars">
-					<Pair>
-						<key>normal</key>
-						<styleUrl>runtime://clone0#sn_wht-stars</styleUrl>
-					</Pair>
-					<Pair>
-						<key>highlight</key>
-						<styleUrl>runtime://clone0#sh_wht-stars</styleUrl>
-					</Pair>
-				</StyleMap>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.98091944444444,40.51706666666666,0</coordinates>
 				</Point>
@@ -4363,7 +4096,7 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4382,7 +4115,7 @@
 					<tilt>0</tilt>
 					<range>650</range>
 				</LookAt>
-				<styleUrl>#msn_wht-stars</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<ExtendedData>
 				</ExtendedData>
 				<Point>
@@ -4400,13 +4133,14 @@
 					<range>650</range>
 					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 				</LookAt>
-				<styleUrl>#msn_wht-stars</styleUrl>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.98916666666667,40.59333333333333,0</coordinates>
 				</Point>
 			</Placemark>
 			<Placemark>
 				<name>magazzino gsf corrette</name>
+				<styleUrl>#msn_wht-stars00101</styleUrl>
 				<Point>
 					<coordinates>17.9696213,40.6258876,0</coordinates>
 				</Point>
