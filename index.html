@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Mappa Fowhe</title>
+  <title>Mappa Interattiva KML con Ricerca Funzionante</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Leaflet CSS -->
@@ -13,14 +13,15 @@
   <style>
     #map { height: 100vh; margin:0; padding:0; }
     body { margin:0; }
+
+    /* Assicura che la lente sia visibile */
+    .leaflet-control-search { z-index: 1000; }
   </style>
 </head>
 <body>
 <div id="map"></div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<!-- Leaflet Search JS -->
 <script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
 
 <script>
@@ -66,7 +67,7 @@
           var link=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
           var icona = iconeCartelle[folderName] || new L.Icon.Default();
 
-          // Aggiunta proprietà title per ricerca
+          // Titolo per la ricerca
           var marker = L.marker([lat, lon], {icon:icona, title:name})
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
             .bindTooltip(name, {permanent:true,direction:"top"});
@@ -75,6 +76,9 @@
           allMarkersLayer.addLayer(marker);
         });
       });
+
+      // Aggiungi il layer di ricerca alla mappa (necessario)
+      allMarkersLayer.addTo(map);
 
       L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
 
