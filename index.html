@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Mappa Interattiva KML con Ricerca Lente in Basso</title>
+  <title>Mappa Fowhe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -12,6 +12,7 @@
     #map { height: 100vh; margin:0; padding:0; }
     body { margin:0; }
 
+    /* Assicura che la lente sia visibile */
     .leaflet-control-search { z-index: 1000; }
   </style>
 </head>
@@ -36,7 +37,7 @@
   };
 
   var layerGroups = {};
-  var allMarkersLayer = L.layerGroup(); 
+  var allMarkers = []; // array di tutti i marker per la ricerca
 
   fetch('luoghi.kml')
     .then(res=>res.text())
@@ -51,7 +52,9 @@
         if(cartelleConsentite.length>0 && !cartelleConsentite.includes(folderName)) return;
 
         var placemarks = folder.getElementsByTagName('Placemark');
-        layerGroups[folderName]=L.layerGroup();
+        layerGroups[folderName] = L.layerGroup();
+
+        // aggiungi la cartella attiva alla mappa
         if(cartelleAttive.includes(folderName)) layerGroups[folderName].addTo(map);
 
         Array.from(placemarks).forEach(pm=>{
@@ -69,24 +72,27 @@
             .bindTooltip(name, {permanent:true,direction:"top"});
 
           layerGroups[folderName].addLayer(marker);
-          allMarkersLayer.addLayer(marker);
+          allMarkers.push(marker); // memorizza per la ricerca
         });
       });
 
-      allMarkersLayer.addTo(map);
-
       L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
 
-      var allMarkers=[];
-      cartelleAttive.forEach(c=>{if(layerGroups[c]) layerGroups[c].eachLayer(l=>allMarkers.push(l.getLatLng()))});
-      if(allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
+      // zoom automatico sui punti attivi
+      var activeMarkers=[];
+      cartelleAttive.forEach(c=>{
+        if(layerGroups[c]) layerGroups[c].eachLayer(l=>activeMarkers.push(l.getLatLng()))
+      });
+      if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-      // Controllo ricerca con lente in basso a sinistra
+      // controllo ricerca
       map.addControl(new L.Control.Search({
-        layer: allMarkersLayer,
+        layer: L.layerGroup(allMarkers), // usa tutti i marker, anche non attivi
         propertyName:'title',
         marker:false,
-        position: 'bottomleft',
+        autoCollapse: true,
+        collapsed:false,
+        position: 'topright',
         moveToLocation:function(latlng,title,map){ map.setView(latlng,15); }
       }));
     });
