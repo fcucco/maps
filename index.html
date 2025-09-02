@@ -19,8 +19,20 @@
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
+  // 👉 Cartelle da includere (lascia [] per includere tutte, escluso "I miei luoghi")
+  const cartelleConsentite = [
+    "BTS Fowhe",
+    "Acea - Solaria",
+    "GSF",
+    "Obton"
+  ];
+
+  // 👉 Cartelle attive di default
+  const cartelleAttive = [
+    "BTS Fowhe" // aggiungi qui le altre se vuoi attivarle subito
+  ];
+
   var layerGroups = {};
-  var folderIndex = 0;
 
   fetch('luoghi.kml')
     .then(res => res.text())
@@ -32,12 +44,19 @@
       Array.from(folders).forEach(folder => {
         var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
 
-        // 👉 Salta la cartella principale "I miei luoghi"
+        // 👉 Salta "I miei luoghi"
         if (folderName === "I miei luoghi") return;
+
+        // 👉 Se cartelleConsentite NON è vuoto, mostra solo quelle
+        if (cartelleConsentite.length > 0 && !cartelleConsentite.includes(folderName)) return;
 
         var placemarks = folder.getElementsByTagName('Placemark');
         layerGroups[folderName] = L.layerGroup();
-        if (folderIndex < 2) layerGroups[folderName].addTo(map);
+
+        // 👉 Attiva solo se la cartella è nell’elenco delle attive
+        if (cartelleAttive.includes(folderName)) {
+          layerGroups[folderName].addTo(map);
+        }
 
         Array.from(placemarks).forEach(pm => {
           var name = pm.getElementsByTagName('name')[0]?.textContent || "Punto senza nome";
@@ -53,15 +72,17 @@
 
           layerGroups[folderName].addLayer(marker);
         });
-
-        folderIndex++;
       });
 
       L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
 
-      // Fit automatico
+      // Fit automatico sui marker delle cartelle attive
       var allMarkers = [];
-      Object.values(layerGroups).forEach(g => g.eachLayer(l => allMarkers.push(l.getLatLng())));
+      cartelleAttive.forEach(c => {
+        if (layerGroups[c]) {
+          layerGroups[c].eachLayer(l => allMarkers.push(l.getLatLng()));
+        }
+      });
       if (allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
     });
 
