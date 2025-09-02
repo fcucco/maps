@@ -31,6 +31,10 @@
 
       Array.from(folders).forEach(folder => {
         var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
+
+        // 👉 Salta la cartella principale "I miei luoghi"
+        if (folderName === "I miei luoghi") return;
+
         var placemarks = folder.getElementsByTagName('Placemark');
         layerGroups[folderName] = L.layerGroup();
         if (folderIndex < 2) layerGroups[folderName].addTo(map);
@@ -45,10 +49,7 @@
           var link = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
           var marker = L.marker([lat, lon])
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
-            .bindTooltip(name, {
-              permanent: true,
-              direction: "top"
-            });
+            .bindTooltip(name, {permanent: true, direction: "top"});
 
           layerGroups[folderName].addLayer(marker);
         });
@@ -58,12 +59,13 @@
 
       L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
 
+      // Fit automatico
       var allMarkers = [];
       Object.values(layerGroups).forEach(g => g.eachLayer(l => allMarkers.push(l.getLatLng())));
       if (allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
     });
 
-  // Mostra etichette solo se lo zoom è sufficientemente alto
+  // Etichette visibili solo oltre un certo zoom
   var tooltipThreshold = 12;
   map.on('zoomend', function() {
     if (map.getZoom() < tooltipThreshold) {
