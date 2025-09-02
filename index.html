@@ -35,7 +35,7 @@
   };
 
   var layerGroups = {};
-  var allMarkers = []; // array di tutti i marker per la ricerca
+  var allMarkers = [];
 
   fetch('luoghi.kml')
     .then(res=>res.text())
@@ -75,14 +75,13 @@
 
       L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
 
-      // zoom automatico sui punti attivi
       var activeMarkers=[];
       cartelleAttive.forEach(c=>{
         if(layerGroups[c]) layerGroups[c].eachLayer(l=>activeMarkers.push(l.getLatLng()))
       });
       if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-      // controllo ricerca usando sourceData
+      // ricerca con lente in basso a sinistra
       map.addControl(new L.Control.Search({
         sourceData: function(text, callResponse) {
           var results = {};
@@ -97,7 +96,7 @@
         moveToLocation: function(latlng, title, map) { map.setView(latlng, 15); },
         collapsed: false,
         autoCollapse: true,
-        position: 'topright'
+        position: 'bottomleft'
       }));
     });
 
