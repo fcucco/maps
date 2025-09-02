@@ -2,137 +2,96 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Mappa Fowhe</title>
+  <title>Mappa Interattiva KML con Ricerca e Icone</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
+
   <style>
-    #map { height: 100vh; margin: 0; padding: 0; }
-    body { margin: 0; }
+    #map { height: 100vh; margin:0; padding:0; }
+    body { margin:0; }
   </style>
 </head>
 <body>
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
+
 <script>
-  // Inizializza la mappa
   var map = L.map('map').setView([41.9, 12.5], 6);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap contributors' }).addTo(map);
 
-  // Cartelle consentite
-  const cartelleConsentite = [
-    "BTS Fowhe",
-    "Acea - Solaria",
-    "GSF",
-    "Obton"
-  ];
+  const cartelleConsentite = ["BTS Fowhe","Acea - Solaria","GSF","Obton"];
+  const cartelleAttive = ["BTS Fowhe"];
 
-  // Cartelle attive di default
-  const cartelleAttive = [
-    "BTS Fowhe"
-  ];
-
-  // Icone personalizzate per cartella
+  // Icone personalizzate
   const iconeCartelle = {
-    "BTS Fowhe": L.icon({
-      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
-    }),
-    "Acea - Solaria": L.icon({
-      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
-    }),
-    "GSF": L.icon({
-      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png",
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
-    }),
-    "Obton": L.icon({
-      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png",
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
-    })
+    "BTS Fowhe": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
+    "Acea - Solaria": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
+    "GSF": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
+    "Obton": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]})
   };
 
   var layerGroups = {};
+  var allMarkersLayer = L.layerGroup(); // layer unico per ricerca
 
-  // Carica il file KML
   fetch('luoghi.kml')
-    .then(res => res.text())
-    .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-    .then(kml => {
+    .then(res=>res.text())
+    .then(str=>new window.DOMParser().parseFromString(str,"text/xml"))
+    .then(kml=>{
       var folders = kml.getElementsByTagName('Folder');
-      if (folders.length === 0) folders = [kml]; // fallback
+      if(folders.length===0) folders=[kml];
 
-      Array.from(folders).forEach(folder => {
+      Array.from(folders).forEach(folder=>{
         var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
-
-        // Salta cartella principale "I miei luoghi"
-        if (folderName === "I miei luoghi") return;
-
-        // Filtra per cartelle consentite
-        if (cartelleConsentite.length > 0 && !cartelleConsentite.includes(folderName)) return;
+        if(folderName==="I miei luoghi") return;
+        if(cartelleConsentite.length>0 && !cartelleConsentite.includes(folderName)) return;
 
         var placemarks = folder.getElementsByTagName('Placemark');
-        layerGroups[folderName] = L.layerGroup();
+        layerGroups[folderName]=L.layerGroup();
+        if(cartelleAttive.includes(folderName)) layerGroups[folderName].addTo(map);
 
-        // Attiva subito le cartelle scelte
-        if (cartelleAttive.includes(folderName)) {
-          layerGroups[folderName].addTo(map);
-        }
-
-        Array.from(placemarks).forEach(pm => {
+        Array.from(placemarks).forEach(pm=>{
           var name = pm.getElementsByTagName('name')[0]?.textContent || "Punto senza nome";
           var coords = pm.getElementsByTagName('coordinates')[0]?.textContent.trim().split(",");
-          if (!coords) return;
-          var lon = parseFloat(coords[0]), lat = parseFloat(coords[1]);
-          if (isNaN(lat) || isNaN(lon)) return;
+          if(!coords) return;
+          var lon=parseFloat(coords[0]), lat=parseFloat(coords[1]);
+          if(isNaN(lat)||isNaN(lon)) return;
 
-          var link = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
-
-          // Icona personalizzata per la cartella
+          var link=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
           var icona = iconeCartelle[folderName] || new L.Icon.Default();
 
-          var marker = L.marker([lat, lon], { icon: icona })
+          var marker = L.marker([lat, lon], {icon:icona})
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
-            .bindTooltip(name, {permanent: true, direction: "top"});
+            .bindTooltip(name, {permanent:true,direction:"top"});
 
           layerGroups[folderName].addLayer(marker);
+          allMarkersLayer.addLayer(marker);
         });
       });
 
-      // Controllo layer (legenda)
-      L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
+      L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
 
-      // Zoom automatico sui punti attivi
-      var allMarkers = [];
-      cartelleAttive.forEach(c => {
-        if (layerGroups[c]) {
-          layerGroups[c].eachLayer(l => allMarkers.push(l.getLatLng()));
-        }
-      });
-      if (allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
+      var allMarkers=[];
+      cartelleAttive.forEach(c=>{if(layerGroups[c]) layerGroups[c].eachLayer(l=>allMarkers.push(l.getLatLng()))});
+      if(allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
+
+      // Controllo ricerca
+      map.addControl(new L.Control.Search({
+        layer: allMarkersLayer,
+        propertyName:'tooltip',
+        marker:false,
+        moveToLocation:function(latlng,title,map){map.setView(latlng,15);}
+      }));
     });
 
-  // Tooltip visibili solo oltre uno zoom
-  var tooltipThreshold = 12;
-  map.on('zoomend', function() {
-    if (map.getZoom() < tooltipThreshold) {
-      map.getPane('tooltipPane').style.display = 'none';
-    } else {
-      map.getPane('tooltipPane').style.display = 'block';
-    }
+  var tooltipThreshold=12;
+  map.on('zoomend',function(){
+    if(map.getZoom()<tooltipThreshold){ map.getPane('tooltipPane').style.display='none'; }
+    else{ map.getPane('tooltipPane').style.display='block'; }
   });
 </script>
 </body>
 </html>
-
