@@ -5,7 +5,9 @@
   <title>Mappa Fowhe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet Search CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
 
   <style>
@@ -16,7 +18,9 @@
 <body>
 <div id="map"></div>
 
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Leaflet Search JS -->
 <script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
 
 <script>
@@ -26,7 +30,6 @@
   const cartelleConsentite = ["BTS Fowhe","Acea - Solaria","GSF","Obton"];
   const cartelleAttive = ["BTS Fowhe"];
 
-  // Icone personalizzate
   const iconeCartelle = {
     "BTS Fowhe": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
     "Acea - Solaria": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
@@ -63,7 +66,8 @@
           var link=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
           var icona = iconeCartelle[folderName] || new L.Icon.Default();
 
-          var marker = L.marker([lat, lon], {icon:icona})
+          // Aggiunta proprietà title per ricerca
+          var marker = L.marker([lat, lon], {icon:icona, title:name})
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
             .bindTooltip(name, {permanent:true,direction:"top"});
 
@@ -74,6 +78,7 @@
 
       L.control.layers(null, layerGroups, {collapsed:false}).addTo(map);
 
+      // zoom automatico sui punti attivi
       var allMarkers=[];
       cartelleAttive.forEach(c=>{if(layerGroups[c]) layerGroups[c].eachLayer(l=>allMarkers.push(l.getLatLng()))});
       if(allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
@@ -81,9 +86,9 @@
       // Controllo ricerca
       map.addControl(new L.Control.Search({
         layer: allMarkersLayer,
-        propertyName:'tooltip',
+        propertyName:'title', // corrisponde a marker.options.title
         marker:false,
-        moveToLocation:function(latlng,title,map){map.setView(latlng,15);}
+        moveToLocation:function(latlng,title,map){ map.setView(latlng,15); }
       }));
     });
 
@@ -95,4 +100,3 @@
 </script>
 </body>
 </html>
-
