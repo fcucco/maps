@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="utf-8" />
-  <title>Mappa Interattiva KML</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <style>
-    #map { height: 100vh; }
-  </style>
-</head>
-<body>
-<div id="map"></div>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
   var map = L.map('map').setView([41.9, 12.5], 6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -19,7 +5,6 @@
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  // 👉 Cartelle da includere (lascia [] per includere tutte, escluso "I miei luoghi")
   const cartelleConsentite = [
     "BTS Fowhe",
     "Acea - Solaria",
@@ -27,10 +12,37 @@
     "Obton"
   ];
 
-  // 👉 Cartelle attive di default
   const cartelleAttive = [
-    "BTS Fowhe" // aggiungi qui le altre se vuoi attivarle subito
+    "BTS Fowhe"
   ];
+
+  // 👉 Definizione icone diverse per cartella
+  const iconeCartelle = {
+    "BTS Fowhe": L.icon({
+      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    }),
+    "Acea - Solaria": L.icon({
+      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    }),
+    "GSF": L.icon({
+      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    }),
+    "Obton": L.icon({
+      iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    })
+  };
 
   var layerGroups = {};
 
@@ -44,16 +56,12 @@
       Array.from(folders).forEach(folder => {
         var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
 
-        // 👉 Salta "I miei luoghi"
         if (folderName === "I miei luoghi") return;
-
-        // 👉 Se cartelleConsentite NON è vuoto, mostra solo quelle
         if (cartelleConsentite.length > 0 && !cartelleConsentite.includes(folderName)) return;
 
         var placemarks = folder.getElementsByTagName('Placemark');
         layerGroups[folderName] = L.layerGroup();
 
-        // 👉 Attiva solo se la cartella è nell’elenco delle attive
         if (cartelleAttive.includes(folderName)) {
           layerGroups[folderName].addTo(map);
         }
@@ -66,7 +74,11 @@
           if (isNaN(lat) || isNaN(lon)) return;
 
           var link = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
-          var marker = L.marker([lat, lon])
+
+          // 👉 Usa icona specifica per la cartella, altrimenti icona default
+          var icona = iconeCartelle[folderName] || L.Icon.Default();
+
+          var marker = L.marker([lat, lon], { icon: icona })
             .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
             .bindTooltip(name, {permanent: true, direction: "top"});
 
@@ -76,7 +88,6 @@
 
       L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
 
-      // Fit automatico sui marker delle cartelle attive
       var allMarkers = [];
       cartelleAttive.forEach(c => {
         if (layerGroups[c]) {
@@ -86,7 +97,6 @@
       if (allMarkers.length) map.fitBounds(L.latLngBounds(allMarkers));
     });
 
-  // Etichette visibili solo oltre un certo zoom
   var tooltipThreshold = 12;
   map.on('zoomend', function() {
     if (map.getZoom() < tooltipThreshold) {
@@ -96,5 +106,3 @@
     }
   });
 </script>
-</body>
-</html>
