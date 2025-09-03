@@ -5,75 +5,95 @@
   <title>Mappa Fowhe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Solo Leaflet, niente plugin esterni -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search@2.9.9/dist/leaflet-search.min.css" />
 
   <style>
-    #map { height: 100vh; margin:0; padding:0; }
-    body { margin:0; }
+    html, body, #map { height: 100%; margin:0; padding:0; }
+    .search-control {
+      background: #fff; padding: 6px; border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+      display: flex; gap: 6px; align-items: center;
+      font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .search-control input {
+      width: 220px; border: 1px solid #ccc; border-radius: 6px; padding: 6px 8px;
+      outline: none;
+    }
+    .search-control button {
+      border: 0; background: #2e7dff; color: #fff; border-radius: 6px;
+      padding: 6px 10px; cursor: pointer;
+    }
+    .search-control button:disabled { opacity: .5; cursor: default; }
+    /* Tooltip on/off con zoom threshold */
   </style>
 </head>
 <body>
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-control-search@2.9.9/dist/leaflet-search.min.js"></script>
-
 <script>
-var map = L.map('map').setView([41.9, 12.5], 6);
+/* ================== MAPPA BASE ================== */
+const map = L.map('map').setView([41.9, 12.5], 6);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom:19,
-  attribution:'© OpenStreetMap contributors'
+  maxZoom: 19,
+  attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
+/* ================== CONFIG ================== */
 const cartelleConsentite = ["BTS Fowhe","Acea - Solaria","GSF","Obton"];
-const cartelleAttive = ["BTS Fowhe"];
+const cartelleAttive     = ["BTS Fowhe"]; // attiva solo Fowhe all’avvio
 
 const iconeCartelle = {
-  "BTS Fowhe": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png", iconSize:[32,32], iconAnchor:[16,32]}),
-  "Acea - Solaria": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png", iconSize:[32,32], iconAnchor:[16,32]}),
-  "GSF": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png", iconSize:[32,32], iconAnchor:[16,32]}),
-  "Obton": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png", iconSize:[32,32], iconAnchor:[16,32]})
+  "BTS Fowhe": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",   iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-28]}),
+  "Acea - Solaria": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-28]}),
+  "GSF": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png",        iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-28]}),
+  "Obton": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png",     iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-28]}),
 };
 
-var layerGroups = {};
-var allMarkers = [];
-var markerFolderMap = new Map();
+/* ================== STRUTTURE ================== */
+const layerGroups = {};           // nomeCartella -> L.LayerGroup
+const allMarkers = [];            // tutti i marker (per ricerca)
+const markerFolderMap = new Map();// marker -> nomeCartella
 
-// Layer fittizio per la voce “Ricerca”
-var ricercaLayer = L.layerGroup();
+// Layer fittizio solo per la voce nel menu
+const ricercaLayer = L.layerGroup();
 
-// Parser KML
+/* ================== PARSING KML ================== */
 fetch('luoghi.kml')
-  .then(res => res.text())
-  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+  .then(r => r.text())
+  .then(t => new DOMParser().parseFromString(t, 'text/xml'))
   .then(kml => {
-    var folders = kml.getElementsByTagName('Folder');
-    if(folders.length===0) folders=[kml];
+    // Prendi tutte le Folder (anche annidate)
+    let folders = Array.from(kml.getElementsByTagName('Folder'));
+    if (folders.length === 0) folders = [kml]; // fallback: Placemark direttamente nel doc
 
-    Array.from(folders).forEach(folder => {
-      var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
-      if(folderName==="I miei luoghi") return;
-      if(!cartelleConsentite.includes(folderName)) return;
+    folders.forEach(folder => {
+      const folderName = folder.getElementsByTagName('name')[0]?.textContent?.trim() || "Senza nome";
+      if (folderName === "I miei luoghi") return;  // escludi contenitore
+      if (!cartelleConsentite.includes(folderName)) return;
 
-      var placemarks = folder.getElementsByTagName('Placemark');
-      layerGroups[folderName] = L.layerGroup();
+      const placemarks = Array.from(folder.getElementsByTagName('Placemark'));
+      if (!layerGroups[folderName]) layerGroups[folderName] = L.layerGroup();
+      if (cartelleAttive.includes(folderName)) layerGroups[folderName].addTo(map);
 
-      if(cartelleAttive.includes(folderName)) layerGroups[folderName].addTo(map);
+      placemarks.forEach(pm => {
+        const nameNode = pm.getElementsByTagName('name')[0];
+        const name = nameNode ? nameNode.textContent.trim() : "Punto senza nome";
 
-      Array.from(placemarks).forEach(pm => {
-        var name = pm.getElementsByTagName('name')[0]?.textContent || "Punto senza nome";
-        var coords = pm.getElementsByTagName('coordinates')[0]?.textContent.trim().split(",");
-        if(!coords) return;
-        var lon=parseFloat(coords[0]), lat=parseFloat(coords[1]);
-        if(isNaN(lat)||isNaN(lon)) return;
+        const coordNode = pm.getElementsByTagName('coordinates')[0];
+        if (!coordNode) return;
+        const parts = coordNode.textContent.trim().split(',');
+        if (parts.length < 2) return;
+        const lon = parseFloat(parts[0]), lat = parseFloat(parts[1]);
+        if (isNaN(lat) || isNaN(lon)) return;
 
-        var link=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
-        var icona = iconeCartelle[folderName] || new L.Icon.Default();
+        const link = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+        const icona = iconeCartelle[folderName] || new L.Icon.Default();
 
-        var marker = L.marker([lat, lon], {icon: icona, title: name})
-          .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank">Vai con Google Maps 🚗</a>`)
-          .bindTooltip(name, {permanent:true,direction:"top"});
+        const marker = L.marker([lat, lon], { icon: icona, title: name })
+          .bindPopup(`<b>${name}</b><br><a href="${link}" target="_blank" rel="noopener">Vai con Google Maps 🚗</a>`)
+          .bindTooltip(name, { permanent: true, direction: 'top' });
 
         layerGroups[folderName].addLayer(marker);
         allMarkers.push(marker);
@@ -81,66 +101,107 @@ fetch('luoghi.kml')
       });
     });
 
-    // Controllo layer (cartelle + voce ricerca)
-    L.control.layers(null, {...layerGroups, "Ricerca": ricercaLayer}, {collapsed:false}).addTo(map);
+    // Controllo layer (cartelle + voce “Ricerca”)
+    L.control.layers(null, { ...layerGroups, "Ricerca": ricercaLayer }, { collapsed: false }).addTo(map);
 
-    // Fit iniziale
-    var activeMarkers=[];
-    cartelleAttive.forEach(c=>{
-      if(layerGroups[c]) layerGroups[c].eachLayer(l=>activeMarkers.push(l.getLatLng()))
-    });
-    if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
+    // Fit iniziale sui marker delle cartelle attive
+    const pts = [];
+    cartelleAttive.forEach(c => layerGroups[c]?.eachLayer(m => pts.push(m.getLatLng())));
+    if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [20,20] });
 
-    // --- Controllo ricerca ---
-    var searchControl = new L.Control.Search({
-      sourceData: function(text, callResponse) {
-        var results = {};
-        allMarkers.forEach(marker => {
-          if(marker.options.title.toLowerCase().includes(text.toLowerCase())) {
-            results[marker.options.title] = marker.getLatLng();
-          }
-        });
-        callResponse(results);
-      },
-      marker: false,
-      position: 'bottomleft',
-      moveToLocation: function(latlng, title, map) {
-        map.setView(latlng, 15);
-        var marker = allMarkers.find(m => m.options.title === title);
-        if(marker) {
-          var folderName = markerFolderMap.get(marker);
-          if(folderName && !map.hasLayer(layerGroups[folderName])) {
-            layerGroups[folderName].addTo(map);
-          }
-          marker.openPopup();
+    // Crea il controllo ricerca personalizzato
+    const searchControl = createSearchControl();
 
-          // Evidenzia marker
-          var originalIcon = marker.options.icon;
-          var highlightIcon = L.icon({
-            iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
-            iconSize: [40,40],
-            iconAnchor: [20,40]
-          });
-          marker.setIcon(highlightIcon);
-          setTimeout(() => { marker.setIcon(originalIcon); }, 2000);
-        }
-      }
-    });
-
-    // Accendi/spegni ricerca dal menu
-    map.on('overlayadd', function(e) {
-      if(e.name==="Ricerca") map.addControl(searchControl);
-    });
-    map.on('overlayremove', function(e) {
-      if(e.name==="Ricerca") map.removeControl(searchControl);
-    });
+    // Accendi/spegni la barra quando si spunta/deseleziona “Ricerca”
+    map.on('overlayadd',   e => { if (e.layer === ricercaLayer) map.addControl(searchControl); });
+    map.on('overlayremove',e => { if (e.layer === ricercaLayer) map.removeControl(searchControl); });
   });
 
-// Mostra etichette solo da un certo zoom
-var tooltipThreshold=12;
-map.on('zoomend', function(){
-  if(map.getZoom()<tooltipThreshold){ map.getPane('tooltipPane').style.display='none'; }
-  else{ map.getPane('tooltipPane').style.display='block'; }
+/* ================== CONTROLLO RICERCA (custom) ================== */
+function createSearchControl() {
+  const Search = L.Control.extend({
+    options: { position: 'bottomleft' },
+    onAdd: function() {
+      const container = L.DomUtil.create('div', 'search-control leaflet-bar');
+
+      const label = document.createElement('span');
+      label.textContent = '🔍';
+
+      const input = document.createElement('input');
+      input.type = 'search';
+      input.placeholder = 'Cerca un luogo salvato…';
+      input.setAttribute('list', 'placesList');
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Cerca';
+
+      // Datalist con tutti i nomi (autocomplete)
+      const data = document.createElement('datalist');
+      data.id = 'placesList';
+      const titles = [...new Set(allMarkers.map(m => m.options.title).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+      titles.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        data.appendChild(opt);
+      });
+
+      container.appendChild(label);
+      container.appendChild(input);
+      container.appendChild(btn);
+      container.appendChild(data);
+
+      // Evita che la mappa catturi scroll/click mentre scrivi
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.disableScrollPropagation(container);
+
+      const runSearch = () => {
+        const q = (input.value || '').trim().toLowerCase();
+        if (!q) return;
+
+        // Trova match migliore (esatto prioritario, altrimenti "includes")
+        let match = allMarkers.find(m => (m.options.title || '').toLowerCase() === q);
+        if (!match) {
+          const candidates = allMarkers.filter(m => (m.options.title || '').toLowerCase().includes(q));
+          match = candidates[0];
+        }
+        if (!match) return; // nessun risultato
+
+        // Attiva la cartella corretta se spenta
+        const folderName = markerFolderMap.get(match);
+        if (folderName && !map.hasLayer(layerGroups[folderName])) {
+          layerGroups[folderName].addTo(map);
+        }
+
+        // Centra, apri popup, evidenzia
+        const latlng = match.getLatLng();
+        map.setView(latlng, Math.max(map.getZoom(), 15));
+        match.openPopup();
+
+        const originalIcon = match.options.icon;
+        const highlightIcon = L.icon({
+          iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
+          iconSize: [40,40],
+          iconAnchor: [20,40],
+          popupAnchor: [0,-36]
+        });
+        match.setIcon(highlightIcon);
+        setTimeout(() => match.setIcon(originalIcon), 2000);
+      };
+
+      btn.addEventListener('click', runSearch);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') runSearch(); });
+
+      return container;
+    }
+  });
+  return new Search();
+}
+
+/* ================== TOOLTIP ON/OFF CON ZOOM ================== */
+const tooltipThreshold = 12;
+map.on('zoomend', () => {
+  const pane = map.getPane('tooltipPane');
+  if (pane) pane.style.display = map.getZoom() < tooltipThreshold ? 'none' : 'block';
 });
 </script>
 </body>
