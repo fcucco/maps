@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test Ricerca</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
+  <style>#map{height:100vh;}</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
+
+<script>
+var map = L.map('map').setView([41.9, 12.5], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+var markers = [
+  L.marker([41.9,12.5],{title:"Roma"}),
+  L.marker([45.4,9.2],{title:"Milano"}),
+  L.marker([40.8,14.25],{title:"Napoli"})
+];
+
+var group = L.layerGroup(markers).addTo(map);
+
+// Layer fittizio "Ricerca"
+var ricercaLayer = L.layerGroup();
+L.control.layers(null, {"Ricerca": ricercaLayer}).addTo(map);
+
+var searchControl = new L.Control.Search({
+  layer: group,
+  propertyName: 'title',
+  marker: false,
+  moveToLocation: function(latlng, title, map) {
+    map.setView(latlng, 12);
+  }
+});
+
+map.on('overlayadd', e=>{
+  if(e.name==="Ricerca") map.addControl(searchControl);
+});
+map.on('overlayremove', e=>{
+  if(e.name==="Ricerca") map.removeControl(searchControl);
+});
+</script>
+</body>
+</html>
