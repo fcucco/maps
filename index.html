@@ -11,7 +11,6 @@
   <style>
     #map { height: 100vh; margin:0; padding:0; }
     body { margin:0; }
-    .leaflet-control-search { z-index: 1000; display:none; } /* nascosta di default */
   </style>
 </head>
 <body>
@@ -22,16 +21,19 @@
 
 <script>
 var map = L.map('map').setView([41.9, 12.5], 6);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap contributors' }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom:19,
+  attribution:'© OpenStreetMap contributors'
+}).addTo(map);
 
 const cartelleConsentite = ["BTS Fowhe","Acea - Solaria","GSF","Obton"];
 const cartelleAttive = ["BTS Fowhe"];
 
 const iconeCartelle = {
-  "BTS Fowhe": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
-  "Acea - Solaria": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
-  "GSF": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]}),
-  "Obton": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png", iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32]})
+  "BTS Fowhe": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png", iconSize:[32,32], iconAnchor:[16,32]}),
+  "Acea - Solaria": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png", iconSize:[32,32], iconAnchor:[16,32]}),
+  "GSF": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png", iconSize:[32,32], iconAnchor:[16,32]}),
+  "Obton": L.icon({iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png", iconSize:[32,32], iconAnchor:[16,32]})
 };
 
 var layerGroups = {};
@@ -41,6 +43,7 @@ var markerFolderMap = new Map();
 // Layer fittizio per la voce “Ricerca”
 var ricercaLayer = L.layerGroup();
 
+// Parser KML
 fetch('luoghi.kml')
   .then(res => res.text())
   .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
@@ -51,7 +54,7 @@ fetch('luoghi.kml')
     Array.from(folders).forEach(folder => {
       var folderName = folder.getElementsByTagName('name')[0]?.textContent || "Senza nome";
       if(folderName==="I miei luoghi") return;
-      if(cartelleConsentite.length>0 && !cartelleConsentite.includes(folderName)) return;
+      if(!cartelleConsentite.includes(folderName)) return;
 
       var placemarks = folder.getElementsByTagName('Placemark');
       layerGroups[folderName] = L.layerGroup();
@@ -78,16 +81,17 @@ fetch('luoghi.kml')
       });
     });
 
-    // Controllo layer con voce "Ricerca"
+    // Controllo layer (cartelle + voce ricerca)
     L.control.layers(null, {...layerGroups, "Ricerca": ricercaLayer}, {collapsed:false}).addTo(map);
 
+    // Fit iniziale
     var activeMarkers=[];
     cartelleAttive.forEach(c=>{
       if(layerGroups[c]) layerGroups[c].eachLayer(l=>activeMarkers.push(l.getLatLng()))
     });
     if(activeMarkers.length) map.fitBounds(L.latLngBounds(activeMarkers));
 
-    // Casella ricerca
+    // --- Controllo ricerca ---
     var searchControl = new L.Control.Search({
       sourceData: function(text, callResponse) {
         var results = {};
@@ -99,8 +103,6 @@ fetch('luoghi.kml')
         callResponse(results);
       },
       marker: false,
-      collapsed: false,
-      autoCollapse: true,
       position: 'bottomleft',
       moveToLocation: function(latlng, title, map) {
         map.setView(latlng, 15);
@@ -112,13 +114,12 @@ fetch('luoghi.kml')
           }
           marker.openPopup();
 
-          // --- EFFETTO EVIDENZIAZIONE TEMPORANEA ---
+          // Evidenzia marker
           var originalIcon = marker.options.icon;
           var highlightIcon = L.icon({
             iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
             iconSize: [40,40],
-            iconAnchor: [20,40],
-            popupAnchor: [0,-40]
+            iconAnchor: [20,40]
           });
           marker.setIcon(highlightIcon);
           setTimeout(() => { marker.setIcon(originalIcon); }, 2000);
@@ -126,22 +127,16 @@ fetch('luoghi.kml')
       }
     });
 
-    // Mostra la casella solo se il layer "Ricerca" è selezionato
+    // Accendi/spegni ricerca dal menu
     map.on('overlayadd', function(e) {
-      if(e.name==="Ricerca") {
-        map.addControl(searchControl);
-        document.querySelector('.leaflet-control-search').style.display='block';
-      }
+      if(e.name==="Ricerca") map.addControl(searchControl);
     });
     map.on('overlayremove', function(e) {
-      if(e.name==="Ricerca") {
-        map.removeControl(searchControl);
-        document.querySelector('.leaflet-control-search').style.display='none';
-      }
+      if(e.name==="Ricerca") map.removeControl(searchControl);
     });
-
   });
 
+// Mostra etichette solo da un certo zoom
 var tooltipThreshold=12;
 map.on('zoomend', function(){
   if(map.getZoom()<tooltipThreshold){ map.getPane('tooltipPane').style.display='none'; }
