@@ -292,13 +292,6 @@
 				</Point>
 			</Placemark>
 			<Placemark>
-				<name>BTS_Lecce</name>
-				<styleUrl>#msn_pink-blank0</styleUrl>
-				<Point>
-					<coordinates>18.15735,40.360683,0</coordinates>
-				</Point>
-			</Placemark>
-			<Placemark>
 				<name>BTS_Leuca</name>
 				<styleUrl>#msn_pink-blank0</styleUrl>
 				<Point>
@@ -369,24 +362,10 @@
 				</Point>
 			</Placemark>
 			<Placemark>
-				<name>BTS_Melissano</name>
-				<styleUrl>#msn_pink-blank0</styleUrl>
-				<Point>
-					<coordinates>18.124154,39.9731,0</coordinates>
-				</Point>
-			</Placemark>
-			<Placemark>
 				<name>BTS_Melpignano</name>
 				<styleUrl>#msn_pink-blank0</styleUrl>
 				<Point>
 					<coordinates>18.291127,40.156471,0</coordinates>
-				</Point>
-			</Placemark>
-			<Placemark>
-				<name>BTS_Monacizzo</name>
-				<styleUrl>#msn_pink-blank0</styleUrl>
-				<Point>
-					<coordinates>17.49668364194135,40.32904783017804,0</coordinates>
 				</Point>
 			</Placemark>
 			<Placemark>
